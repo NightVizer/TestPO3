@@ -50,3 +50,6 @@
 *.cobertura.xml
 *.md
 !/part2/docs/REQUIREMENTS.md
+
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+/graft/
