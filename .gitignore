@@ -2,8 +2,14 @@
 # Everything else stays local, including the Word report kept outside this folder.
 /*
 !/.gitignore
+!/.scratch/
 !/part1/
 !/part2/
+
+# Keep only the working specification from the local planning folder.
+/.scratch/**
+!/.scratch/subscription-reminders/
+!/.scratch/subscription-reminders/spec.md
 
 # Part 1 contains source and test files without project files.
 /part1/**
@@ -50,6 +56,7 @@
 *.cobertura.xml
 *.md
 !/part2/docs/REQUIREMENTS.md
+!/.scratch/subscription-reminders/spec.md
 
 # graft's local graph cache — regenerable, not committed (run `graft build`).
 /graft/
