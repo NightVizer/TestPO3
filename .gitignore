@@ -1,0 +1,52 @@
+# Submission repository: track source, tests, solution, and final specification.
+# Everything else stays local, including the Word report kept outside this folder.
+/*
+!/.gitignore
+!/part1/
+!/part2/
+
+# Part 1 contains source and test files without project files.
+/part1/**
+!/part1/**/
+!/part1/**/*.cs
+
+# Part 2: the ASP.NET Core solution, source projects, tests, and final API/TZ.
+/part2/**
+!/part2/**/
+!/part2/SubscriptionReminders.sln
+!/part2/src/**/*.cs
+!/part2/src/**/*.csproj
+!/part2/src/**/appsettings.json
+!/part2/tests/**/*.cs
+!/part2/tests/**/*.csproj
+!/part2/tests/*.ps1
+!/part2/tests/*.runsettings
+!/part2/docs/REQUIREMENTS.md
+
+# Build products, downloaded packages, test output, and editor state.
+**/bin/
+**/obj/
+**/TestResults/
+**/packages/
+**/node_modules/
+**/.vs/
+**/.idea/
+**/.vscode/
+*.dll
+*.exe
+*.pdb
+*.cache
+*.log
+*.tmp
+*.bak
+*.user
+*.suo
+*.nupkg
+*.snupkg
+*.trx
+*.coverage
+*.coveragexml
+*.opencover.xml
+*.cobertura.xml
+*.md
+!/part2/docs/REQUIREMENTS.md
