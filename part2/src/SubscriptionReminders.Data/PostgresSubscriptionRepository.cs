@@ -7,8 +7,16 @@ public sealed class PostgresSubscriptionRepository(NpgsqlDataSource dataSource) 
 {
     public async Task InitializeAsync()
     {
-        await using var command = dataSource.CreateCommand("""
+        await using var connection = await dataSource.OpenConnectionAsync();
+        await using var transaction = await connection.BeginTransactionAsync();
+        await using var command = new NpgsqlCommand("""
+            -- Serialize schema initialization across API instances.
+            SELECT pg_advisory_xact_lock(hashtext('SubscriptionReminders'), hashtext('InitializeAsync'));
+
             CREATE TABLE IF NOT EXISTS "Services" (
+                "Id" integer PRIMARY KEY
+            );
+            CREATE TABLE IF NOT EXISTS "User" (
                 "Id" integer PRIMARY KEY
             );
             CREATE TABLE IF NOT EXISTS "Subscriptions" (
@@ -17,10 +25,16 @@ public sealed class PostgresSubscriptionRepository(NpgsqlDataSource dataSource) 
                 "AmountCents" integer NOT NULL CHECK ("AmountCents" > 0),
                 "NextPaymentDate" date NOT NULL
             );
+            INSERT INTO "User" ("Id") VALUES (1)
+            ON CONFLICT ("Id") DO NOTHING;
+            -- The default also assigns existing subscriptions to the initial user.
+            ALTER TABLE "Subscriptions"
+                ADD COLUMN IF NOT EXISTS "UserId" integer NOT NULL DEFAULT 1 REFERENCES "User"("Id");
             INSERT INTO "Services" ("Id") VALUES (1), (2), (3)
             ON CONFLICT ("Id") DO NOTHING;
-            """);
+            """, connection, transaction);
         await command.ExecuteNonQueryAsync();
+        await transaction.CommitAsync();
     }
 
     public async Task<bool> ServiceExistsAsync(int id)
